@@ -1,1 +1,1 @@
-/* Replace with your SQL commands */
+CREATE TABLE users (email VARCHAR(100), password VARCHAR(100));
