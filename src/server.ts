@@ -1,15 +1,15 @@
-import express, { Request, Response } from 'express'
-import bodyParser from 'body-parser'
+import express, { Request, Response } from "express";
+import dotenv from "dotenv";
 
-const app: express.Application = express()
-const address: string = "0.0.0.0:3000"
+dotenv.config();
+const app: express.Application = express();
 
-app.use(bodyParser.json())
+app.use(express.json());
 
-app.get('/', function (req: Request, res: Response) {
-    res.send('Hello World!')
-})
+app.get("/", function (req: Request, res: Response) {
+  res.send("Hello World!");
+});
 
 app.listen(3000, function () {
-    console.log(`starting app on: ${address}`)
-})
+  console.log(`starting app on port: 3000`);
+});
