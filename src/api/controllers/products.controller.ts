@@ -1,5 +1,8 @@
 import express, { Request, Response } from "express";
-import { fetchAllProducts } from "../services/prodcuts.service";
+import {
+  fetchAllProducts,
+  fetchSingleProduct,
+} from "../services/prodcuts.service";
 
 const productRouter = express.Router();
 
@@ -14,5 +17,16 @@ productRouter.get(
     }
   }
 );
+
+productRouter.get("/:id", async (req: Request, res: Response) => {
+  try {
+    const product = await fetchSingleProduct(req.params.id);
+    return res.status(200).json({ product });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ err: `error fetching product ${req.params.id}` });
+  }
+});
 
 export default productRouter;

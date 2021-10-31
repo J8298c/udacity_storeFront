@@ -11,8 +11,8 @@ export const getAllProducts = async (): Promise<Product[]> => {
 
 export const getProduct = async (id: number): Promise<Product> => {
   const sqlConnection = await client.connect();
-  const query = `SELECT * FROM products WHERE id =($1)`;
-  const results = await sqlConnection.query(query);
+  const query = `SELECT * FROM products WHERE id=($1)`;
+  const results = await sqlConnection.query(query, [id]);
   sqlConnection.release();
   return results.rows[0];
 };
