@@ -35,13 +35,13 @@ userRouter.post(
         return res.status(400).json({ error: "missing required parameters" });
       }
 
-      const { user, error } = await logUserIn(email, password);
+      const { user, error, token } = await logUserIn(email, password);
 
       if (error !== null) {
         return res.status(400).json({ error });
       }
 
-      return res.status(200).json({ user });
+      return res.status(200).json({ user, token });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ err: "Error logging in" });
