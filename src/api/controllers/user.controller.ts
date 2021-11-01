@@ -17,8 +17,10 @@ userRouter.post(
       if (result.error) {
         return res.status(400).json({ error: result.error });
       }
-      return res.status(200).json({ message: "Hello World" });
+
+      return res.status(200).json({ user: result.user });
     } catch (err) {
+      console.error(err);
       return res.status(500).json({ err: "error creating user" });
     }
   }
