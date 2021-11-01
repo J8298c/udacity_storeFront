@@ -12,3 +12,11 @@ export const insertUser = async (
   sqlCon.release();
   return results.rows[0];
 };
+
+export const getUser = async (email: string): Promise<User> => {
+  const sqlCon = await client.connect();
+  const findQuery = "SELECT * FROM users WHERE email=($1)";
+  const results = await sqlCon.query(findQuery, [email]);
+  sqlCon.release();
+  return results.rows[0];
+};
