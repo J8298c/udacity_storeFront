@@ -1,7 +1,12 @@
 import bcrypt from "bcrypt";
 import * as EmailValidator from "email-validator";
 import jwt from "jsonwebtoken";
-import { insertUser, getUser } from "../dao/user.dao";
+import {
+  insertUser,
+  getUser,
+  getAllUsers,
+  fetchSingleUserById,
+} from "../dao/user.dao";
 import { User } from "../interfaces/User";
 
 const concatPasswordWithPepper = (password: string): string =>
@@ -52,4 +57,11 @@ export const logUserIn = async (
   });
 
   return { user, error: null, token };
+};
+
+export const fetchAllUsers = async (): Promise<User[]> => getAllUsers();
+
+export const fetchSingleUser = async (id: string): Promise<User | null> => {
+  const result = await fetchSingleUserById(Number(id));
+  return result;
 };

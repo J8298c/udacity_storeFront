@@ -20,3 +20,21 @@ export const getUser = async (email: string): Promise<User> => {
   sqlCon.release();
   return results.rows[0];
 };
+
+export const getAllUsers = async (): Promise<User[]> => {
+  const sqlCon = await client.connect();
+  const findQuery = "SELECT email, id FROM users";
+  const results = await sqlCon.query(findQuery);
+  sqlCon.release();
+  return results.rows;
+};
+
+export const fetchSingleUserById = async (id: number): Promise<User | null> => {
+  const sqlCon = await client.connect();
+  const findQuery = "SELECT email FROM users WHERE id=($1)";
+  const results = await sqlCon.query(findQuery, [id]);
+  if (!results.rows.length) {
+    return null;
+  }
+  return results.rows[0];
+};

@@ -20,8 +20,14 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Users
 
 - Index [token required]
+  '/api/users/all'
 - Show [token required]
+  '/api/users/:id'
 - Create N[token required]
+- Login
+  '/api/users/login' [email, password, firstname, lastname required]
+- Signup
+  '/api/users/signup' [email, password required]
 
 #### Orders
 
