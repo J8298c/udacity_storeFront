@@ -19,7 +19,9 @@ export const checkAuthorization = async (req: Request, res: Response, next: Next
     const userId = token!.id
 
     const user = await fetchSingleUserById(Number(userId))
-    console.log(user)
+    if(!user) {
+      console.log('do something here')
+    }
     next();
   })
 }
