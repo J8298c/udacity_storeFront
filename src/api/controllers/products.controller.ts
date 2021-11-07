@@ -4,11 +4,13 @@ import {
   fetchAllProducts,
   fetchSingleProduct,
 } from "../services/prodcuts.service";
+import { checkAuthorization } from '../middleware/checkAuthorization';
 
 const productRouter = express.Router();
 
 productRouter.get(
   "/all",
+  checkAuthorization,
   async (req: Request, res: Response): Promise<void> => {
     try {
       const products = await fetchAllProducts();
@@ -19,7 +21,7 @@ productRouter.get(
   }
 );
 
-productRouter.get("/:id", async (req: Request, res: Response) => {
+productRouter.get("/:id", checkAuthorization, async (req: Request, res: Response) => {
   try {
     const product = await fetchSingleProduct(req.params.id);
     return res.status(200).json({ product });
@@ -30,7 +32,7 @@ productRouter.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-productRouter.post("/new", async (req: Request, res: Response) => {
+productRouter.post("/new",checkAuthorization,  async (req: Request, res: Response) => {
   try {
     const { name, price } = req.body;
     if (!name || !price) {
