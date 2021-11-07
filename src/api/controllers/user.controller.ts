@@ -6,6 +6,7 @@ import {
   logUserIn,
 } from "../services/user.service";
 import { User } from "../interfaces/User";
+import { checkAuthorization } from "../middleware/checkAuthorization";
 
 const userRouter = express.Router();
 
@@ -56,6 +57,7 @@ userRouter.post(
 
 userRouter.get(
   "/all",
+  checkAuthorization,
   async (req: Request, res: Response): Promise<Response> => {
     try {
       const users = await fetchAllUsers();
