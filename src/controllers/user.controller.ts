@@ -2,9 +2,12 @@ import express, { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import emailValidator from 'email-validator';
 import jwt from 'jsonwebtoken';
-import { insertUser, getUserByEmail } from '../models/user.model'
+import { insertUser, getUserByEmail, fetchUsers } from '../models/user.model'
+import checkAuthorization from "../middleware/checkAuthorization";
 
 const userRouter = express.Router();
+
+const internalAppError = 'Internal application error'
 
 const createJWT = (id: string): string => jwt.sign({userId: id}, process.env.TOKEN_SECRET!)
 
@@ -26,7 +29,7 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: 'user created successfully', token })
   } catch (err) {
-    return res.status(500).json({ error: 'Internal application error' })
+    return res.status(500).json({ error: internalAppError })
   }
 });
 
@@ -51,7 +54,16 @@ userRouter.post('/login', async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: 'Login success', token })
   } catch (err) {
-    return res.status(500).json({ error: 'Application Error'})
+    return res.status(500).json({ error: internalAppError})
+  }
+})
+
+userRouter.get('/all', checkAuthorization, async (req: Request, res: Response) => {
+  try {
+    const allUsersEmails = await fetchUsers()
+    return res.status(200).json({ allUsersEmails })
+  } catch (err) {
+    return res.status(500).json({ error: internalAppError})
   }
 })
 
