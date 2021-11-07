@@ -2,11 +2,11 @@ import express, { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import emailValidator from 'email-validator';
 import jwt from 'jsonwebtoken';
-import { insertUser } from '../models/user.model'
+import { insertUser, getUserByEmail } from '../models/user.model'
 
 const userRouter = express.Router();
 
-const createJWT = (id: string): string => jwt.sign(id, process.env.TOKEN_SECRET!)
+const createJWT = (id: string): string => jwt.sign({userId: id}, process.env.TOKEN_SECRET!)
 
 userRouter.post('/signup', async (req: Request, res: Response) => {
   try {
@@ -26,7 +26,32 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: 'user created successfully', token })
   } catch (err) {
-    res.status(500).json({ error: 'Internal application error' })
+    return res.status(500).json({ error: 'Internal application error' })
+  }
+});
+
+userRouter.post('/login', async (req: Request, res: Response) => {
+  try {
+    if (!req.body.email || !req.body.password) {
+      return res.status(400).json({ error: 'missing required params'})
+    }
+    const user = await getUserByEmail(req.body.email)
+    const badEmailPassComboMsg = 'Bad email password combo'
+    if(!user.password) {
+      return res.status(400).json({ error: badEmailPassComboMsg})
+    }
+
+    const passwordCheck = bcrypt.compareSync(`${req.body.password}${process.env.PEPPER}`, user.password)
+
+    if(!passwordCheck) {
+      return res.status(400).json({ error: badEmailPassComboMsg })
+    }
+
+    const token = createJWT(user.id.toString())
+
+    return res.status(200).json({ message: 'Login success', token })
+  } catch (err) {
+    return res.status(500).json({ error: 'Application Error'})
   }
 })
 
