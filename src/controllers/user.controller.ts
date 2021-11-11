@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import emailValidator from 'email-validator';
 import jwt from 'jsonwebtoken';
-import { insertUser, getUserByEmail, fetchUsers } from '../models/user.model'
+import { insertUser, getUserByEmail, fetchUsers, orderProduct } from '../models/user.model'
 import checkAuthorization from "../middleware/checkAuthorization";
 
 const userRouter = express.Router();
@@ -53,6 +53,20 @@ userRouter.post('/login', async (req: Request, res: Response) => {
     const token = createJWT(user.id.toString())
 
     return res.status(200).json({ message: 'Login success', token })
+  } catch (err) {
+    return res.status(500).json({ error: internalAppError})
+  }
+})
+
+userRouter.post('/orderproduct', checkAuthorization, async (req: Request, res: Response) => {
+  try {
+    const { productId, userId, quantity } = req.body;
+    if (!productId || !userId || !quantity) {
+      res.status(400).json({ error: 'Missing required parameter'})
+      return;
+    }
+    await orderProduct(Number(productId), Number(userId), Number(quantity))
+    res.status(200).json({ message: 'Product ordered' })
   } catch (err) {
     return res.status(500).json({ error: internalAppError})
   }
