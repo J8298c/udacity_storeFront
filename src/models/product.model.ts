@@ -21,4 +21,12 @@ export const orderProduct = async (productId: number, userId: number, quantity: 
   const insertQuery = 'INSERT INTO products_orders (quantity, product_id, user_id) VALUES($1, $2, $3)'
   await client.query(insertQuery, [quantity, productId, userId])
   client.release()
-} 
+}
+
+export const fetchOrders = async () => {
+  const client = await Client.connect();
+  const fetchQuery = 'SELECT * FROM products_orders';
+  const results = await client.query(fetchQuery)
+  client.release()
+  return results.rows
+}
