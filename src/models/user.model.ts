@@ -1,4 +1,5 @@
 import Client  from '../db';
+import { User } from '../interfaces/user';
 
 export const insertUser = async (email: string, first_name: string, last_name: string, password: string) => {
     const client = await Client.connect();
@@ -8,7 +9,7 @@ export const insertUser = async (email: string, first_name: string, last_name: s
     return results.rows[0];
 }
 
-export const getUserByEmail = async (email: string): Promise<{ id: number, password: string }> => {
+export const getUserByEmail = async (email: string): Promise<User> => {
     const client = await Client.connect();
     const fetchQuery = 'SELECT password, id FROM users WHERE email=($1)'
     const results = await client.query(fetchQuery, [email])
@@ -16,7 +17,7 @@ export const getUserByEmail = async (email: string): Promise<{ id: number, passw
     return results.rows[0]
 }
 
-export const fetchUsers = async (): Promise<string[]> => {
+export const fetchUsers = async (): Promise<User[]> => {
     const client = await Client.connect();
     const fetchQuery = 'SELECT email FROM users'
     const results = await client.query(fetchQuery)

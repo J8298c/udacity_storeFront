@@ -1,6 +1,7 @@
 import Client from '../db';
+import { Product } from '../interfaces/products';
 
-export const fetchAllProducts = async () => {
+export const fetchAllProducts = async (): Promise<Product[]> => {
   const client = await Client.connect()
   const fetchQuery = 'SELECT * FROM products';
   const results = await client.query(fetchQuery);
@@ -8,7 +9,7 @@ export const fetchAllProducts = async () => {
   return results.rows;
 }
 
-export const fetchSingleProduct = async (id: number) => {
+export const fetchSingleProduct = async (id: number) :Promise<Product> => {
   const client = await Client.connect()
   const fetchQuery = 'SELECT * FROM products WHERE id=($1)'
   const results = await client.query(fetchQuery, [id])
