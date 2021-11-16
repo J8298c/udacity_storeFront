@@ -50,7 +50,7 @@ userRouter.post('/login', async (req: Request, res: Response) => {
       return res.status(400).json({ error: badEmailPassComboMsg })
     }
 
-    const token = createJWT(user.id.toString())
+    const token = createJWT(user.id!.toString())
 
     return res.status(200).json({ message: 'Login success', token })
   } catch (err) {
