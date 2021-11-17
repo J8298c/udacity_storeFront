@@ -19,6 +19,11 @@ describe('User Controller Intergration Test', () => {
         const response = await request.post('/api/users/signup').send(body)
         expect(response.status).toEqual(400)
       })
+      it('should fail if a malformed email is sent in body', async () => {
+        const body = { email: 'mytestuser.mail.com', password: 'abcd1234', first_name: 'test', last_name: 'user'}
+        const response = await request.post('/api/users/signup').send(body)
+        expect(response.status).toEqual(400)
+      })
     })
   })
 })
