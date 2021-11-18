@@ -44,4 +44,26 @@ describe('User Controller Intergration Test', () => {
       })
     })
   })
+
+  describe('[GET/all', () => {
+    let token: string;
+    beforeAll(async () => {
+      const goodUser = { email: 'mytestuser@mail.com', password: 'abcd1234' };
+      const response = await request.post('/api/users/login').send(goodUser)
+      token = response.body.token;
+    })
+    describe('missing JWT', () => {
+      it('should return a 401 if not jwt is present', async () => {
+        const response = await request.get('/api/users/all')
+        expect(response.status).toEqual(401)
+      })
+    })
+    describe('authenticated request', () => {
+      it('should return a 200', async () => {
+        const response = await request.get('/api/users/all').set({ 'Authorization': `Bearer ${token}`})
+        expect(response.status).toEqual(200);
+        expect(response.body.allUsersEmails).toBeDefined()
+      })
+    })
+  })
 })
