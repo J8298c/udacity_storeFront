@@ -9,29 +9,35 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Products
 
 - Index
-  '/api/products/all'
+  [GET]'/api/products/all'
 - Show
-  '/api/products/:id'
+  [GET]'/api/products/:id'
 - Create [token required]
-  '/api/prodcuts/new' [name, price, required]
+  [POST]'/api/prodcuts/new' [name, price, required]
+
 - [OPTIONAL] Top 5 most popular products
 - [OPTIONAL] Products by category (args: product category)
 
 #### Users
 
 - Index [token required]
-  '/api/users/all'
+  [GET]'/api/users/all'
 - Show [token required]
-  '/api/users/:id'
+  [GET]'/api/users/:id'
 - Create N[token required]
 - Login
-  '/api/users/login' [email, password, firstname, lastname required]
+  [POST]'/api/users/login' [email, password required]
 - Signup
-  '/api/users/signup' [email, password required]
+  [POST]'/api/users/signup' [email, password, firstname, lastname required] 
 
 #### Orders
+- Show orders [token required]
+  [GET]'/api/products/orders'
 
+- Create Order [token required]
+  [POST]'/orderproduct'
 - Current Order by user (args: user id)[token required]
+  [GET]
 - [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
 ## Data Shapes
