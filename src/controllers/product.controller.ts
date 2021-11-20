@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import checkAuthorization from "../middleware/checkAuthorization";
 import {
   fetchAllProducts,
-  fetchOrders,
+  fetchUserOrder,
   fetchSingleProduct,
   orderProduct,
   createNewProduct
@@ -24,11 +24,11 @@ productRouter.get(
 );
 
 productRouter.get(
-  "/orders",
+  "/orders/:userId",
   checkAuthorization,
   async (req: Request, res: Response) => {
     try {
-      const orders = await fetchOrders();
+      const orders = await fetchUserOrder(Number(req.params.userId));
       return res.status(200).json({ orders });
     } catch (err) {
       return res.status(500).json({ error: "internal application error" });

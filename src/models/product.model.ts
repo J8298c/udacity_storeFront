@@ -39,10 +39,10 @@ export const orderProduct = async (
   client.release();
 };
 
-export const fetchOrders = async () => {
+export const fetchUserOrder = async (userId: number) => {
   const client = await Client.connect();
-  const fetchQuery = "SELECT * FROM orders";
-  const results = await client.query(fetchQuery);
+  const fetchQuery = "SELECT * FROM orders WHERE user_id=($1)";
+  const results = await client.query(fetchQuery, [userId]);
   client.release();
   return results.rows;
 };
