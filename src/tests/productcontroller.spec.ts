@@ -64,4 +64,13 @@ describe("Product Controller", () => {
       expect(response.body.product).toBeDefined();
     });
   });
+
+  describe("get user orders", () => {
+    it('should fetch a users order', async () => {
+      const response = await request
+        .get("/api/products/orders/1")
+        .set({ Authorization: `Bearer ${userToken}` });
+      expect(response.status).toEqual(200)
+    })
+  })
 });
