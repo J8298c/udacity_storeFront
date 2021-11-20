@@ -1,15 +1,18 @@
-import jwt from "jsonwebtoken";
 import supertest from "supertest";
-import app from "../server";
+import app from "../app";
 
 describe("Product Controller", () => {
   const request = supertest(app);
   let userToken: string;
-  let userId: number;
   beforeAll(async () => {
-    const goodUser = { email: "mytestuser@mail.com", password: "abcd1234" };
-    const response = await request.post("/api/users/login").send(goodUser);
+    const goodUser = { email: "mytestuser@mail.com", password: "abcd1234", first_name: 'test', last_name: 'user' };
+    const response = await request.post("/api/users/signup").send(goodUser);
     userToken = response.body.token;
+    const product = await request
+        .post("/api/products/new")
+        .set({ Authorization: `Bearer ${userToken}` })
+        .send({ name: "foo", price: 100 });
+
   });
 
   describe("create new product", () => {
@@ -35,7 +38,6 @@ describe("Product Controller", () => {
       const response = await request
         .get("/api/products/all")
         .set({ Authorization: `Bearer ${userToken}` });
-
       expect(response.status).toEqual(200);
       expect(response.body.products).toBeDefined();
     });

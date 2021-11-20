@@ -9,8 +9,8 @@
     "test": "jasmine-ts",
     "build": "npx tsc",
     "tsc": "tsc",
-    "migrate:up": "db-migrate up",
-    "migrate:down": "db-migrate down"
+    "migrate:up": "db-migrate up -c 3",
+    "migrate:down": "db-migrate down -c 3"
   },
   "author": "Udacity",
   "license": "ISC",

@@ -5,6 +5,7 @@ import {
   fetchOrders,
   fetchSingleProduct,
   orderProduct,
+  createNewProduct
 } from "../models/product.model";
 
 const productRouter = express.Router();
@@ -28,10 +29,8 @@ productRouter.get(
   async (req: Request, res: Response) => {
     try {
       const orders = await fetchOrders();
-      console.log(orders);
       return res.status(200).json({ orders });
     } catch (err) {
-      console.error(err);
       return res.status(500).json({ error: "internal application error" });
     }
   }
@@ -47,6 +46,7 @@ productRouter.post(
         return;
       }
       const { name, price } = req.body;
+      await createNewProduct(name, Number(price))
       res
         .status(200)
         .json({ success: true, message: `${name} created successfully` });
@@ -69,7 +69,6 @@ productRouter.post(
       await orderProduct(Number(productId), Number(userId), Number(quantity));
       res.status(200).json({ message: "Product ordered" });
     } catch (err) {
-      console.error(err);
       return res.status(500).json({ error: "internal application error" });
     }
   }
